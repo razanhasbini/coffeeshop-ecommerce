@@ -27,11 +27,11 @@ services:
       - key: DB_SCHEMA
         value: coffeeshop
       - key: SESSION_DRIVER
-        value: database
+        value: cookie
       - key: CACHE_STORE
-        value: database
+        value: file
       - key: QUEUE_CONNECTION
-        value: database
+        value: sync
       - key: FILESYSTEM_DISK
         value: public
       - key: SUPER_ADMIN_NAME

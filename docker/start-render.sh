@@ -2,6 +2,9 @@
 set -eu
 
 export APACHE_HTTP_PORT="${PORT:-10000}"
+export SESSION_DRIVER=cookie
+export CACHE_STORE=file
+export QUEUE_CONNECTION=sync
 
 sed -ri "s/Listen 80/Listen ${APACHE_HTTP_PORT}/" /etc/apache2/ports.conf
 sed -ri "s/:80>/:${APACHE_HTTP_PORT}>/" /etc/apache2/sites-available/000-default.conf
