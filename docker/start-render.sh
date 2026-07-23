@@ -2,7 +2,7 @@
 set -eu
 
 export APACHE_HTTP_PORT="${PORT:-10000}"
-export SESSION_DRIVER=cookie
+export SESSION_DRIVER=file
 export CACHE_STORE=file
 export QUEUE_CONNECTION=sync
 

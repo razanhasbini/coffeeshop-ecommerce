@@ -27,7 +27,7 @@ services:
       - key: DB_SCHEMA
         value: coffeeshop
       - key: SESSION_DRIVER
-        value: cookie
+        value: file
       - key: CACHE_STORE
         value: file
       - key: QUEUE_CONNECTION
