@@ -1,123 +1,111 @@
 @extends('layout')
 
-@section('title', 'Our Services - Coffee Shop')
+@section('title', 'Our Services — CoffeeShop')
+
+@section('styles')
+<style>
+    .services-hero {
+        min-height: 520px; display:flex; align-items:center; position:relative; overflow:hidden;
+        background:url('/images/services-hero.jpg') center/cover no-repeat;
+    }
+    .services-hero::before { content:''; position:absolute; inset:0; background:linear-gradient(105deg,rgba(20,8,3,.9),rgba(28,15,7,.6) 55%,rgba(28,15,7,.28)); }
+    .services-hero::after { content:''; position:absolute; width:520px; height:520px; right:-180px; bottom:-310px; border:1px solid rgba(242,203,131,.25); border-radius:50%; box-shadow:0 0 0 55px rgba(242,203,131,.035),0 0 0 110px rgba(242,203,131,.025); }
+    .services-hero .content { position:relative; z-index:1; max-width:710px; }
+    .services-hero h1 { color:#fff; font-size:clamp(3rem,7vw,5.7rem); line-height:.98; margin:.8rem 0 1.2rem; }
+    .services-hero p { color:rgba(255,255,255,.72); font-size:1.08rem; line-height:1.8; max-width:570px; }
+    .hero-kicker { color:var(--coffee-light); font-size:.75rem; letter-spacing:3.5px; text-transform:uppercase; font-weight:700; }
+    .service-card { height:100%; padding:2rem; border-radius:var(--radius); background:rgba(255,255,255,.88); box-shadow:var(--shadow); transition:var(--transition); position:relative; overflow:hidden; }
+    .service-card:hover { transform:translateY(-8px); box-shadow:var(--shadow-hover); }
+    .service-card::after { content:''; position:absolute; width:95px; height:95px; right:-48px; top:-48px; border-radius:50%; background:rgba(201,138,56,.08); transition:var(--transition); }
+    .service-card:hover::after { transform:scale(1.7); }
+    .service-icon { width:58px; height:58px; display:grid; place-items:center; border-radius:17px; margin-bottom:1.4rem; color:#fff; font-size:1.35rem; background:linear-gradient(145deg,var(--coffee-accent),#8d4e19); box-shadow:0 10px 24px rgba(201,138,56,.25); }
+    .service-card h4 { font-size:1.32rem; margin-bottom:.7rem; }
+    .service-card p { color:var(--text-muted); font-size:.9rem; line-height:1.75; margin:0; }
+    .experience-panel { border-radius:28px; overflow:hidden; background:var(--coffee-dark); box-shadow:var(--shadow-hover); }
+    .experience-panel img { width:100%; height:100%; min-height:470px; object-fit:cover; }
+    .experience-copy { padding:clamp(2rem,5vw,4.5rem); color:#fff; }
+    .experience-copy h2 { color:#fff; font-size:clamp(2.2rem,4vw,3.5rem); }
+    .experience-copy p { color:rgba(255,255,255,.66); line-height:1.8; }
+    .quality-item { display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid rgba(255,255,255,.09); }
+    .quality-item:last-child { border:0; }
+    .quality-number { color:var(--coffee-light); font-family:'Playfair Display',serif; font-size:1.25rem; }
+    .services-cta { position:relative; overflow:hidden; padding:6rem 0; background:linear-gradient(120deg,#3b1f0e,#1c0f07); }
+    .services-cta::before { content:'COFFEE'; position:absolute; inset:auto 0 -3rem; text-align:center; font:700 clamp(7rem,18vw,17rem)/1 'Playfair Display',serif; color:rgba(255,255,255,.025); letter-spacing:.08em; }
+</style>
+@endsection
 
 @section('content')
-<!-- Hero Section -->
-<section class="hero-section text-center py-5" style="background: url('/images/services-hero.jpg') no-repeat center center/cover; color: white;">
-    <div class="container">
-        <h1 class="display-4">Our Services</h1>
-        <p class="lead">Experience exceptional coffee and more.</p>
+<section class="services-hero">
+    <div class="container content">
+        <span class="hero-kicker">Beyond the perfect cup</span>
+        <h1>Crafted moments,<br><em style="color:var(--coffee-light);">made for you.</em></h1>
+        <p>From precision brewing to private gatherings, every service is designed around exceptional coffee, thoughtful hospitality, and memorable detail.</p>
+        <div class="d-flex gap-3 flex-wrap mt-4">
+            <a href="#services-grid" class="btn btn-coffee btn-lg">Explore Services</a>
+            <a href="/contact" class="btn btn-outline-light btn-lg" style="border-radius:50px;padding:.7rem 1.7rem;">Plan an Event</a>
+        </div>
     </div>
 </section>
 
-<!-- Services Section -->
-<section id="services" class="py-5">
+<section id="services-grid" style="padding:6rem 0;background:var(--warm-gray);">
     <div class="container">
-        <h2 class="text-center mb-4">What We Offer</h2>
-        <div class="row">
-            <!-- Service 1 -->
-            <div class="col-md-4 text-center">
-                <div class="service-box p-4">
-                    <i class="fas fa-mug-hot fa-3x mb-3"></i>
-                    <h5>Premium Coffee</h5>
-                    <p>Sourced from the finest beans around the world, our coffee is freshly brewed to perfection.</p>
-                </div>
+        <div class="row align-items-end mb-5 g-3">
+            <div class="col-lg-7">
+                <span class="section-label">What we create</span>
+                <h2 class="section-title mb-0">An experience for every occasion</h2>
             </div>
-            <!-- Service 2 -->
-            <div class="col-md-4 text-center">
-                <div class="service-box p-4">
-                    <i class="fas fa-utensils fa-3x mb-3"></i>
-                    <h5>Delicious Pastries</h5>
-                    <p>Pair your coffee with a selection of freshly baked pastries and treats.</p>
-                </div>
-            </div>
-            <!-- Service 3 -->
-            <div class="col-md-4 text-center">
-                <div class="service-box p-4">
-                    <i class="fas fa-laptop fa-3x mb-3"></i>
-                    <h5>Cozy Workspace</h5>
-                    <p>Enjoy a comfortable environment for working or studying, with free Wi-Fi and ample seating.</p>
-                </div>
-            </div>
+            <div class="col-lg-5"><p class="mb-0" style="color:var(--text-muted);line-height:1.75;">Thoughtfully designed services, delivered by people who care about every detail.</p></div>
         </div>
+        <div class="row g-4">
+            @foreach ([
+                ['bi-cup-hot-fill','Specialty Coffee','Single-origin beans, dialed-in daily and handcrafted by experienced baristas.'],
+                ['bi-basket2-fill','Fresh Pairings','Small-batch pastries and seasonal bites selected to complement every brew.'],
+                ['bi-laptop','Work & Create','Fast Wi-Fi, comfortable seating, quiet corners, and coffee that keeps ideas moving.'],
+                ['bi-stars','Private Events','A warm, character-rich setting for launches, celebrations, and intimate gatherings.'],
+                ['bi-building','Corporate Catering','Complete coffee bars and curated refreshments brought directly to your team.'],
+                ['bi-bicycle','Pickup & Delivery','Your favorites prepared fresh and ready exactly when and where you need them.']
+            ] as [$icon,$title,$copy])
+            <div class="col-md-6 col-lg-4">
+                <article class="service-card">
+                    <div class="service-icon"><i class="bi {{ $icon }}"></i></div>
+                    <h4>{{ $title }}</h4>
+                    <p>{{ $copy }}</p>
+                </article>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
 
-        <div class="row mt-4">
-            <!-- Service 4 -->
-            <div class="col-md-4 text-center">
-                <div class="service-box p-4">
-                    <i class="fas fa-calendar-alt fa-3x mb-3"></i>
-                    <h5>Event Hosting</h5>
-                    <p>Host your private events, meetings, or celebrations in our spacious café.</p>
-                </div>
-            </div>
-            <!-- Service 5 -->
-            <div class="col-md-4 text-center">
-                <div class="service-box p-4">
-                    <i class="fas fa-seedling fa-3x mb-3"></i>
-                    <h5>Sustainable Practices</h5>
-                    <p>We care about the planet and ensure that our operations are eco-friendly.</p>
-                </div>
-            </div>
-            <!-- Service 6 -->
-            <div class="col-md-4 text-center">
-                <div class="service-box p-4">
-                    <i class="fas fa-shopping-bag fa-3x mb-3"></i>
-                    <h5>Takeaway & Delivery</h5>
-                    <p>Enjoy our offerings in the comfort of your home with our takeaway and delivery options.</p>
+<section style="padding:6rem 0;background:var(--cream);">
+    <div class="container">
+        <div class="experience-panel">
+            <div class="row g-0 align-items-stretch">
+                <div class="col-lg-6"><img src="/images/why-choose-us.jpg" alt="Barista preparing specialty coffee"></div>
+                <div class="col-lg-6 d-flex align-items-center">
+                    <div class="experience-copy">
+                        <span class="section-label" style="color:var(--coffee-light);">The CoffeeShop standard</span>
+                        <h2>Hospitality you can feel.</h2>
+                        <p>Great service should feel effortless. Behind it is obsessive preparation, careful sourcing, and a team empowered to make every visit special.</p>
+                        <div class="mt-4">
+                            <div class="quality-item"><span class="quality-number">01</span><div><strong>Quality without compromise</strong><div style="color:rgba(255,255,255,.55);font-size:.85rem;margin-top:.2rem;">Premium ingredients and precise preparation.</div></div></div>
+                            <div class="quality-item"><span class="quality-number">02</span><div><strong>Genuinely personal service</strong><div style="color:rgba(255,255,255,.55);font-size:.85rem;margin-top:.2rem;">Warm, attentive, and never scripted.</div></div></div>
+                            <div class="quality-item"><span class="quality-number">03</span><div><strong>Conscious by design</strong><div style="color:rgba(255,255,255,.55);font-size:.85rem;margin-top:.2rem;">Ethical sourcing and lower-waste operations.</div></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Why Choose Us Section -->
-<section id="why-choose-us" class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-4">Why Choose Us?</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <h5>Exceptional Quality</h5>
-                <p>We prioritize quality in everything we do, from sourcing beans to serving customers.</p>
-                <h5>Passionate Team</h5>
-                <p>Our baristas and staff are passionate about delivering the best experience for you.</p>
-            </div>
-            <div class="col-md-6">
-                <img src="/images/why-choose-us.jpg" alt="Why Choose Us" class="img-fluid rounded">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Call to Action Section -->
-<section class="cta-section text-white py-5" style="background: #6c757d;">
-    <div class="container text-center">
-        <h2>Experience Our Services Today!</h2>
-        <p>Visit us or place your order online to enjoy the best coffee experience.</p>
-        <a href="{{ ('products') }}" class="btn btn-light">Order Now</a>
-    </div>
-</section>
-
-<!-- Testimonials Section -->
-<section id="testimonials" class="py-5">
-    <div class="container">
-        <h2 class="text-center">What Our Customers Say</h2>
-        <div class="row">
-            <!-- Testimonial 1 -->
-            <div class="col-md-6">
-                <blockquote class="blockquote">
-                    <p>Best coffee in town! I love the cozy atmosphere and friendly staff.</p>
-                    <footer class="blockquote-footer">Jane Smith</footer>
-                </blockquote>
-            </div>
-            <!-- Testimonial 2 -->
-            <div class="col-md-6">
-                <blockquote class="blockquote">
-                    <p>Perfect place for a quick meeting. Their pastries are to die for!</p>
-                    <footer class="blockquote-footer">Mike Johnson</footer>
-                </blockquote>
-            </div>
-        </div>
+<section class="services-cta text-center text-white">
+    <div class="container position-relative" style="z-index:1;">
+        <span class="section-label" style="color:var(--coffee-light);">Your table is waiting</span>
+        <h2 class="section-title mx-auto" style="color:#fff;max-width:680px;">Let’s make your next coffee moment exceptional.</h2>
+        <p class="mx-auto mt-3 mb-4" style="max-width:550px;color:rgba(255,255,255,.64);">Visit us, order online, or talk to our team about a tailored coffee experience.</p>
+        <a href="/products" class="btn btn-coffee btn-lg me-2">Browse the Menu</a>
+        <a href="/contact" class="btn btn-outline-light btn-lg" style="border-radius:50px;">Contact Us</a>
     </div>
 </section>
 @endsection

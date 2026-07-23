@@ -16,6 +16,15 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
+        if (! Auth::check()) {
+            $cart = session('guest_cart', []);
+            $productId = (int) $request->product_id;
+            $cart[$productId] = ($cart[$productId] ?? 0) + (int) $request->quantity;
+            session(['guest_cart' => $cart]);
+
+            return response()->json(['success' => true, 'message' => 'Product added to cart!', 'cartCount' => array_sum($cart)]);
+        }
+
         $cartItem = Cart::where('user_id', Auth::id())
             ->where('product_id', $request->product_id)
             ->first();
@@ -35,12 +44,15 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Product added to cart!',
+            'cartCount' => Cart::where('user_id', Auth::id())->sum('quantity'),
         ]);
     }
 
     public function viewCart()
     {
-        $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
+        $cartItems = Auth::check()
+            ? Cart::with('product')->where('user_id', Auth::id())->get()
+            : $this->guestCartItems();
         $totalPrice = $cartItems->sum(function ($item) {
             return $item->quantity * $item->product->price;
         });
@@ -49,36 +61,24 @@ class CartController extends Controller
     }
 
     public function remove($id)
-{
-    \Log::info("Remove method called for product ID: $id");
+    {
+        if (! Auth::check()) {
+            $cart = session('guest_cart', []);
+            unset($cart[(int) $id]);
+            session(['guest_cart' => $cart]);
+            $items = $this->guestCartItems();
+        } else {
+            Cart::where('user_id', Auth::id())->where('product_id', $id)->delete();
+            $items = Cart::with('product')->where('user_id', Auth::id())->get();
+        }
 
-    $cartItem = Cart::where('user_id', Auth::id())->where('product_id', $id)->first();
-
-    if (!$cartItem) {
-        \Log::info("Product not found in cart for user ID: " . Auth::id());
         return response()->json([
-            'success' => false,
-            'message' => 'Item not found in cart!',
-        ], 404);
+            'success' => true,
+            'message' => 'Product removed from cart!',
+            'totalPrice' => $items->sum(fn ($item) => $item->product->price * $item->quantity),
+            'cartCount' => $items->sum('quantity'),
+        ]);
     }
-
-    $cartItem->delete();
-
-    \Log::info("Product with ID: $id successfully removed");
-
-    $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
-    $totalPrice = $cartItems->sum(function ($item) {
-        return $item->product->price * $item->quantity;
-    });
-
-    \Log::info("Total price after removal: $totalPrice");
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Product removed from cart!',
-        'totalPrice' => $totalPrice,
-    ]);
-}
 
     public function update(Request $request, $id)
     {
@@ -86,14 +86,15 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $cartItem = Cart::where('user_id', Auth::id())->where('product_id', $id)->first();
-
-        if ($cartItem) {
-            $cartItem->quantity = $request->quantity;
-            $cartItem->save();
+        if (! Auth::check()) {
+            $cart = session('guest_cart', []);
+            if (isset($cart[(int) $id])) $cart[(int) $id] = (int) $request->quantity;
+            session(['guest_cart' => $cart]);
+            $cartItems = $this->guestCartItems();
+        } else {
+            Cart::where('user_id', Auth::id())->where('product_id', $id)->update(['quantity' => $request->quantity]);
+            $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
         }
-
-        $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
         $totalPrice = $cartItems->sum(function ($item) {
             return $item->product->price * $item->quantity;
         });
@@ -103,6 +104,20 @@ class CartController extends Controller
             'message' => 'Cart updated successfully!',
             'cart' => $cartItems,
             'totalPrice' => $totalPrice,
+            'cartCount' => $cartItems->sum('quantity'),
         ]);
+    }
+
+    private function guestCartItems()
+    {
+        $guestCart = session('guest_cart', []);
+        $products = Product::whereIn('id', array_keys($guestCart))->get()->keyBy('id');
+
+        return collect($guestCart)->map(function ($quantity, $productId) use ($products) {
+            if (! $products->has((int) $productId)) return null;
+            $item = new Cart(['product_id' => (int) $productId, 'quantity' => (int) $quantity]);
+            $item->setRelation('product', $products->get((int) $productId));
+            return $item;
+        })->filter()->values();
     }
 }
