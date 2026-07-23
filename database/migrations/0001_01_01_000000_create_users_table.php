@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+        // A first deploy can be interrupted after PostgreSQL creates this
+        // table but before Laravel records the migration. Adopt that table
+        // on the retry instead of failing every container restart.
+        if (Schema::hasTable('users')) {
+            return;
+        }
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('username');
