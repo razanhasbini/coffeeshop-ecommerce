@@ -28,6 +28,7 @@
         }
 
         * { box-sizing: border-box; }
+        html { overflow-x: clip; scroll-padding-top: 88px; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -46,7 +47,10 @@
         a { text-underline-offset: 3px; }
         ::selection { background: var(--coffee-accent); color: #fff; }
         :focus-visible { outline: 3px solid rgba(201,138,56,.55); outline-offset: 3px; }
-        main { position: relative; isolation: isolate; }
+        main { position: relative; isolation: isolate; min-width: 0; }
+        img, svg, video, canvas { max-width: 100%; height: auto; }
+        input, select, textarea, button { max-width: 100%; }
+        td, th, p, a, span { overflow-wrap: anywhere; }
 
         /* ── NAVBAR ── */
         .navbar {
@@ -241,12 +245,38 @@
         .reveal-item { opacity: 0; transform: translateY(28px); transition: opacity .75s ease, transform .75s cubic-bezier(.2,.8,.2,1); }
         .reveal-item.is-visible { opacity: 1; transform: translateY(0); }
         @media (max-width: 991.98px) {
-            .navbar-collapse { margin-top:.65rem; padding:.75rem; border-top:1px solid rgba(255,255,255,.09); background:transparent; }
+            .navbar-collapse { max-height:calc(100dvh - 78px); overflow-y:auto; margin-top:.65rem; padding:.75rem 0 .25rem; border-top:1px solid rgba(255,255,255,.09); background:transparent; }
             .navbar-nav { align-items:stretch !important; }
-            .nav-link { padding:.7rem .85rem !important; }
+            .nav-link { min-height:44px; display:flex; align-items:center; padding:.7rem .85rem !important; }
+            .nav-link.nav-cta { justify-content:center; margin:.35rem 0 .25rem; }
+            .cart-count { top:2px; right:auto; left:55px; }
             .navbar-toggler { width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08); }
             .navbar-toggler-icon { filter:none; }
             .about-hero, .contact-hero, .products-hero, .hero-section { background-attachment: scroll !important; }
+        }
+        @media (max-width: 767.98px) {
+            :root { --radius:16px; --radius-sm:10px; }
+            body { background-image:none; }
+            .container { --bs-gutter-x:1.5rem; }
+            .navbar { padding:.55rem 0; }
+            .navbar-brand { font-size:1.16rem; }
+            .brand-mark { width:34px; height:34px; }
+            .section-title { font-size:clamp(1.75rem,9vw,2.35rem); }
+            .section-label { letter-spacing:2px; font-size:.7rem; }
+            .btn-coffee, .btn-outline-coffee { min-height:44px; padding:.65rem 1.25rem; }
+            .form-control, .form-select { min-height:46px; font-size:16px; }
+            textarea.form-control { min-height:96px; }
+            footer { padding:3.2rem 0 1.25rem; text-align:center; }
+            footer .social-link { margin-inline:auto; }
+            footer .d-flex { justify-content:center; }
+            footer .footer-bottom { display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem .75rem; }
+            footer .footer-bottom .mx-3 { display:none; }
+            .reveal-item { transition-delay:0ms !important; }
+        }
+        @media (max-width: 359.98px) {
+            .container { --bs-gutter-x:1rem; }
+            .navbar-brand { font-size:1.03rem; }
+            .brand-mark { margin-right:.4rem; }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
@@ -261,7 +291,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
         <div class="container nav-shell">
             <a class="navbar-brand d-flex align-items-center" href="/" aria-label="CoffeeShop home"><span class="brand-mark"><i class="bi bi-cup-hot-fill"></i></span><span>Coffee</span>Shop</a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Open navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">

@@ -25,7 +25,7 @@
     .receipt-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-top:1.4rem}
     .email-note{border-radius:16px;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:.9rem}
     .email-note.success{background:#e8f5ec;color:#236b3a}.email-note.info{background:#fff5df;color:#765018}
-    @media(max-width:700px){.receipt-details{grid-template-columns:1fr}.receipt-top{flex-direction:column}.receipt-row{grid-template-columns:1fr auto}.receipt-row .item-qty{display:none}.receipt-card{border-radius:18px}}
+    @media(max-width:700px){.receipt-page{padding:2rem 0 3rem}.confirmation-head{margin-bottom:1.25rem}.receipt-details{grid-template-columns:1fr;padding:1.15rem}.receipt-top{flex-direction:column;padding:1.15rem}.receipt-items{padding:.5rem 1.15rem 1rem}.receipt-row{grid-template-columns:1fr auto;gap:.65rem}.receipt-row .item-qty{display:none}.receipt-total{justify-content:space-between;gap:1rem;padding:1.15rem}.receipt-card{border-radius:18px}.receipt-actions{display:grid;grid-template-columns:1fr}.receipt-actions .btn{width:100%}.email-note{font-size:.82rem}}
     @media print{header,footer,.receipt-actions,.email-note{display:none!important}.receipt-page{padding:0;background:#fff}.receipt-card{box-shadow:none;border:0}}
 </style>
 @endsection

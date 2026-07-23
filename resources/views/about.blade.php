@@ -47,6 +47,13 @@
         box-shadow: var(--shadow);
         border-left: 4px solid var(--coffee-accent);
     }
+    @media(max-width:767.98px) {
+        .about-hero { min-height:240px; }
+        section:not(.about-hero) { padding:3.5rem 0 !important; }
+        .team-card, .value-card { padding:1.35rem; }
+        .team-avatar, .team-initials { width:84px; height:84px; }
+        .about-hero + section .d-flex.gap-4 { gap:1.25rem !important; flex-wrap:wrap; }
+    }
 </style>
 @endsection
 

@@ -83,6 +83,19 @@
     #product-results.is-loading { opacity:.42; transform:translateY(5px); pointer-events:none; }
     .filter-live-status { font-size:.75rem; color:var(--text-muted); display:flex; align-items:center; gap:.4rem; }
     .filter-live-status::before { content:''; width:7px; height:7px; border-radius:50%; background:#43a047; box-shadow:0 0 0 4px rgba(67,160,71,.1); }
+    @media (max-width: 767.98px) {
+        .products-hero { min-height:230px; background-position:58% center !important; }
+        .filter-bar { padding:1rem; margin-bottom:1.5rem; }
+        .category-chips { margin-right:-1rem; padding-right:1rem; scroll-snap-type:x proximity; }
+        .category-chip { min-height:40px; scroll-snap-align:start; }
+        .filter-live-status { display:none; }
+        .product-card .card-img { height:210px; }
+        .product-card .card-body { padding:1rem; }
+    }
+    @media (max-width: 399.98px) {
+        .product-card .card-img { height:190px; }
+        .product-qty-btn { width:36px; height:36px; }
+    }
 </style>
 @endsection
 

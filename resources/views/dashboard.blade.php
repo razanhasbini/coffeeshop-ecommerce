@@ -80,8 +80,39 @@
     .role-super_admin { background:#f3e5f5;color:#7b1fa2; }.role-manager { background:#fff3e0;color:#bf6516; }.role-user { background:#e3f2fd;color:#1565c0; }
     .status-dot { width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:.35rem; }.status-active{background:#43a047}.status-suspended{background:#e53935}
     .log-action { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.72rem; color:var(--coffee-accent); background:rgba(201,138,56,.09); padding:.24rem .5rem; border-radius:7px; }
-    @media(max-width:991px) { .admin-grid { grid-template-columns:1fr; } }
-    @media(max-width:575px) { .admin-form-grid { grid-template-columns:1fr; } .admin-form-grid .full { grid-column:auto; } }
+    @media(max-width:991px) {
+        .admin-grid { grid-template-columns:1fr; }
+        .summary-card { position:static; }
+    }
+    @media(max-width:767px) {
+        .dashboard-page { padding:1.5rem 0 3rem; }
+        .dash-header { margin-bottom:1.25rem; }
+        .dash-header .text-end { text-align:left !important; width:100%; }
+        .admin-nav { top:58px; margin-inline:calc(var(--bs-gutter-x) * -.5); border-radius:0; padding:.45rem .75rem; }
+        .admin-nav a { min-height:42px; display:flex; align-items:center; }
+        .stat-card { padding:1.1rem; gap:.9rem; }
+        .stat-icon { width:46px; height:46px; }
+        .stat-card .value { font-size:1.45rem; }
+        .panel-header { padding:1rem; align-items:flex-start; }
+        .panel-body { padding:1rem; }
+        .panel .table-responsive { -webkit-overflow-scrolling:touch; }
+        .orders-table { min-width:720px; }
+        .orders-table th, .orders-table td { padding:.75rem; }
+        .product-admin-item { grid-template-columns:58px minmax(0,1fr) auto; gap:.7rem; }
+        .product-admin-image { width:58px; height:58px; border-radius:11px; }
+        .color-field { justify-content:space-between; }
+        canvas { max-height:280px; }
+    }
+    @media(max-width:575px) {
+        .admin-form-grid { grid-template-columns:1fr; gap:.85rem; }
+        .admin-form-grid .full { grid-column:auto; }
+        .admin-form-grid .btn { width:100%; }
+        .product-admin-item details { min-width:0; }
+        .product-admin-item details .btn { width:100%; }
+        #users-admin form.d-flex { display:grid !important; grid-template-columns:1fr 1fr; width:100%; }
+        #users-admin form.d-flex select { width:100% !important; }
+        #users-admin form.d-flex button { grid-column:1/-1; width:100%; }
+    }
 </style>
 @endsection
 

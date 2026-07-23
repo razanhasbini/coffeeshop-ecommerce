@@ -31,6 +31,18 @@
     .quality-number { color:var(--coffee-light); font-family:'Playfair Display',serif; font-size:1.25rem; }
     .services-cta { position:relative; overflow:hidden; padding:6rem 0; background:linear-gradient(120deg,#3b1f0e,#1c0f07); }
     .services-cta::before { content:'COFFEE'; position:absolute; inset:auto 0 -3rem; text-align:center; font:700 clamp(7rem,18vw,17rem)/1 'Playfair Display',serif; color:rgba(255,255,255,.025); letter-spacing:.08em; }
+    @media(max-width:767.98px) {
+        .services-hero { min-height:calc(100svh - 58px); padding:4rem 0; }
+        .services-hero::after { width:280px; height:280px; right:-170px; bottom:-160px; }
+        .services-hero h1 { font-size:clamp(2.6rem,13vw,3.8rem); }
+        .services-hero p { font-size:.96rem; line-height:1.65; }
+        .service-card { padding:1.35rem; }
+        .experience-panel { border-radius:18px; }
+        .experience-panel img { min-height:280px; max-height:340px; }
+        .experience-copy { padding:1.5rem; }
+        .services-cta { padding:4rem 0; }
+        .services-cta .btn { width:100%; margin:.35rem 0 !important; }
+    }
 </style>
 @endsection
 

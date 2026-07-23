@@ -103,6 +103,23 @@
         padding: 5rem 2rem;
     }
     .empty-cart i { font-size: 4rem; color: var(--coffee-accent); opacity: .3; }
+    @media (max-width: 767.98px) {
+        .cart-page { padding:2rem 0 3rem; }
+        .cart-card-header { padding:1rem 1.1rem; }
+        .cart-card .table-responsive { overflow:visible; }
+        .cart-table thead { display:none; }
+        .cart-table, .cart-table tbody, .cart-table tr, .cart-table td { display:block; width:100%; }
+        .cart-table tr { position:relative; padding:1rem; border-bottom:1px solid #eadfd3; }
+        .cart-table tr:last-child { border-bottom:0; }
+        .cart-table td { display:flex; justify-content:space-between; align-items:center; gap:1rem; min-height:42px; padding:.35rem 0; border:0; }
+        .cart-table td:first-child { display:block; padding:0 2.5rem .75rem 0; }
+        .cart-table td:not(:first-child):not(:last-child)::before { content:attr(data-label); color:var(--text-muted); font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+        .cart-table td:last-child { position:absolute; top:.7rem; right:.7rem; width:auto; min-height:auto; }
+        .qty-btn { width:36px; height:36px; }
+        .remove-btn { width:40px; height:40px; color:#b65b52; }
+        .summary-card { position:static; padding:1.25rem; }
+        .empty-cart { padding:3.5rem 1.25rem; }
+    }
 </style>
 @endsection
 
@@ -151,15 +168,15 @@
                                         <div style="font-size:.76rem;color:var(--text-muted);margin-top:.2rem;">{{ ucfirst($item->product->category) }}</div>
                                         @endif
                                     </td>
-                                    <td style="color:var(--coffee-accent);font-weight:600;">${{ number_format($item->product->price, 2) }}</td>
-                                    <td>
+                                    <td data-label="Price" style="color:var(--coffee-accent);font-weight:600;">${{ number_format($item->product->price, 2) }}</td>
+                                    <td data-label="Quantity">
                                         <div class="qty-control">
                                             <button class="qty-btn qty-minus" type="button">−</button>
                                             <div class="qty-display quantity-value">{{ $item->quantity }}</div>
                                             <button class="qty-btn qty-plus" type="button">+</button>
                                         </div>
                                     </td>
-                                    <td class="item-subtotal" style="font-weight:600;">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
+                                    <td data-label="Subtotal" class="item-subtotal" style="font-weight:600;">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
                                     <td>
                                         <button class="remove-btn remove-item" title="Remove"><i class="bi bi-trash3"></i></button>
                                     </td>

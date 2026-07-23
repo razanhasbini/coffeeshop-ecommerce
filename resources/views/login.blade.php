@@ -54,6 +54,14 @@
         color: var(--coffee-dark);
         box-shadow: 0 2px 8px rgba(0,0,0,.08);
     }
+    @media(max-width:575.98px) {
+        .auth-page { min-height:calc(100svh - 58px); padding:1.25rem .25rem; align-items:flex-start; }
+        .auth-card { border-radius:16px; }
+        .auth-card-header { padding:1.5rem 1rem 1.25rem; }
+        .auth-card-body { padding:1.1rem; }
+        .auth-card-header .logo { font-size:1.6rem; }
+        .auth-tab { min-height:44px; display:grid; place-items:center; padding:.45rem .25rem; font-size:.8rem; }
+    }
 </style>
 @endsection
 

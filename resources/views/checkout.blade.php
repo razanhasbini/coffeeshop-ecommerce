@@ -11,6 +11,14 @@
     .field-hint{display:block;color:#8c7b6d;font-size:.78rem;margin-top:.4rem}
     .delivery-fields{padding:1.15rem;border:1px solid #eee3d8;border-radius:16px;background:#fdfaf6;margin-bottom:1rem}
     .delivery-fields h5{font-size:.88rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;color:var(--coffee-dark)}
+    @media(max-width:767.98px){
+        .checkout-page{padding:2rem 0 3rem}
+        .checkout-card{padding:1.15rem}
+        .delivery-fields{padding:1rem}
+        .checkout-item{align-items:flex-start}
+        .checkout-item span{min-width:0}
+        .checkout-item strong{flex:0 0 auto}
+    }
 </style>
 @endsection
 

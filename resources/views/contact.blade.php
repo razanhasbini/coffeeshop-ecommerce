@@ -43,6 +43,13 @@
     }
     .info-label { font-size: .75rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .2rem; }
     .info-value { font-size: .95rem; font-weight: 500; }
+    @media(max-width:767.98px) {
+        .contact-hero { min-height:230px; }
+        .contact-form-card, .info-card { padding:1.35rem; }
+        .info-item { gap:.8rem; margin-bottom:1.3rem; }
+        .info-icon { width:40px; height:40px; }
+        iframe { min-height:300px; }
+    }
 </style>
 @endsection
 

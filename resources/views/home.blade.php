@@ -172,6 +172,28 @@
         top: 50%;
         transform: translateY(-50%);
     }
+    @media (max-width: 767.98px) {
+        .hero { min-height:calc(100svh - 58px); padding:4.5rem 0 5.5rem; background-position:58% center; }
+        .hero-content { padding:0 1rem; }
+        .hero h1 { font-size:clamp(2.35rem,13vw,3.35rem); }
+        .hero p { font-size:.97rem; line-height:1.6; }
+        .hero-eyebrow { max-width:100%; letter-spacing:2px; }
+        .hero-scroll { bottom:1.5rem; }
+        .stats-bar { padding:1.25rem 0; }
+        .stat-item { padding:.65rem .25rem; }
+        .stat-number { font-size:1.5rem; }
+        .stat-label { font-size:.66rem; letter-spacing:.8px; }
+        .featured-heading { margin-bottom:1.4rem; }
+        .featured-marquee { margin-bottom:2rem !important; }
+        .featured-marquee-item { gap:1rem; padding:0 1rem; letter-spacing:1.7px; }
+        .product-card-home img { height:210px; }
+        .product-card-home .card-body, .testimonial-card { padding:1.2rem; }
+        .feature-icon { margin-inline:auto; }
+        .cta-band { padding:3.5rem 0; text-align:center; }
+        .cta-band p { margin-inline:auto; }
+        section:not(.hero):not(.cta-band) { scroll-margin-top:65px; }
+        section[style*="padding: 5rem"] { padding:3.5rem 0 !important; }
+    }
 </style>
 @endsection
 
