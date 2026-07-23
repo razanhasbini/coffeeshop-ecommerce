@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\ActivityLog;
 use App\Models\Cart;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -32,16 +33,27 @@ class AuthController extends Controller
         }
 
         if ($user && Hash::check($request->password, $user->password)) {
-            Cookie::queue('user', $user->username, 6000);
             Auth::login($user);
             $request->session()->regenerate();
-            foreach ($request->session()->pull('guest_cart', []) as $productId => $quantity) {
-                $cartItem = Cart::firstOrNew(['user_id' => $user->id, 'product_id' => (int) $productId]);
-                $cartItem->quantity = ($cartItem->exists ? $cartItem->quantity : 0) + (int) $quantity;
-                $cartItem->save();
+
+            try {
+                Cookie::queue('user', $user->username, 6000);
+
+                foreach ($request->session()->pull('guest_cart', []) as $productId => $quantity) {
+                    $cartItem = Cart::firstOrNew(['user_id' => $user->id, 'product_id' => (int) $productId]);
+                    $cartItem->quantity = ($cartItem->exists ? $cartItem->quantity : 0) + (int) $quantity;
+                    $cartItem->save();
+                }
+
+                $user->forceFill(['last_login_at' => now()])->save();
+                ActivityLog::record('auth.login', $user->username.' signed in', $user, ['role' => $user->role]);
+            } catch (Throwable $exception) {
+                error_log(sprintf(
+                    '[CoffeeShop login extras] %s: %s',
+                    $exception::class,
+                    $exception->getMessage()
+                ));
             }
-            $user->forceFill(['last_login_at' => now()])->save();
-            ActivityLog::record('auth.login', $user->username.' signed in', $user, ['role' => $user->role]);
 
             return redirect()->intended($user->canAccessAdmin() ? route('dashboard') : route('products'))
                 ->with('success', 'Logged in successfully.');
