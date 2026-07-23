@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminDashboardTest extends TestCase
@@ -33,7 +33,6 @@ class AdminDashboardTest extends TestCase
 
     public function test_admin_can_create_a_product_with_an_image(): void
     {
-        Storage::fake('public');
         $admin = User::factory()->create();
         $admin->forceFill(['is_admin' => true, 'role' => 'manager', 'is_active' => true])->save();
 
@@ -47,7 +46,8 @@ class AdminDashboardTest extends TestCase
         ])->assertRedirect('/dashboard')->assertSessionHasNoErrors();
 
         $product = Product::where('name', 'Velvet Espresso')->firstOrFail();
-        $this->assertStringStartsWith('/storage/products/', $product->image_url);
+        $this->assertSame('/products/'.$product->id.'/image', $product->image_url);
+        $this->assertTrue(ProductImage::where('product_id', $product->id)->exists());
         $this->assertSame('Seasonal Specials', $product->category);
     }
 }

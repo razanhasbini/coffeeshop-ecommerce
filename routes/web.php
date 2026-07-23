@@ -50,6 +50,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/products/{product}/image', [ProductController::class, 'image'])->name('products.image');
 
 
 

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -9,11 +11,19 @@ use Illuminate\Support\Str;
 
 class ProductImageService
 {
-    public function store(UploadedFile $image): array
+    public function store(UploadedFile $image, Product $product): array
     {
         if (! $this->cloudinaryConfigured()) {
+            ProductImage::updateOrCreate(
+                ['product_id' => $product->id],
+                [
+                    'mime_type' => $image->getMimeType(),
+                    'image_data' => base64_encode($image->get()),
+                ]
+            );
+
             return [
-                'image_url' => '/storage/'.$image->store('products', 'public'),
+                'image_url' => '/products/'.$product->id.'/image',
                 'image_public_id' => null,
             ];
         }
@@ -38,7 +48,7 @@ class ProductImageService
         ];
     }
 
-    public function delete(?string $imageUrl, ?string $publicId = null): void
+    public function delete(?string $imageUrl, ?string $publicId = null, ?int $productId = null): void
     {
         if ($publicId && $this->cloudinaryConfigured()) {
             $timestamp = time();
@@ -59,6 +69,10 @@ class ProductImageService
 
         if ($imageUrl && str_starts_with($imageUrl, '/storage/')) {
             Storage::disk('public')->delete(substr($imageUrl, strlen('/storage/')));
+        }
+
+        if ($productId) {
+            ProductImage::where('product_id', $productId)->delete();
         }
     }
 

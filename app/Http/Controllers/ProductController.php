@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\ProductImageService;
 use Illuminate\Http\Request;
 use App\Models\ActivityLog;
@@ -63,8 +64,8 @@ class ProductController extends Controller
     {
         $data = $this->validatedProduct($request, true);
         $data = $this->resolveCategory($data);
-        $data = [...$data, ...$this->images->store($request->file('image'))];
         $product = Product::create($data);
+        $product->update($this->images->store($request->file('image'), $product));
         ActivityLog::record('product.created', 'Product “'.$product->name.'” was created', $product, ['price' => $product->price]);
 
         return back()->with('success', 'Product added successfully.');
@@ -76,8 +77,10 @@ class ProductController extends Controller
         $data = $this->resolveCategory($data);
 
         if ($request->hasFile('image')) {
-            $newImage = $this->images->store($request->file('image'));
-            $this->images->delete($product->image_url, $product->image_public_id);
+            if ($product->image_public_id || str_starts_with((string) $product->image_url, '/storage/')) {
+                $this->images->delete($product->image_url, $product->image_public_id);
+            }
+            $newImage = $this->images->store($request->file('image'), $product);
             $data = [...$data, ...$newImage];
         }
 
@@ -90,7 +93,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         ActivityLog::record('product.deleted', 'Product “'.$product->name.'” was deleted', $product);
-        $this->images->delete($product->image_url, $product->image_public_id);
+        $this->images->delete($product->image_url, $product->image_public_id, $product->id);
         $product->delete();
 
         return back()->with('success', 'Product deleted successfully.');
@@ -117,6 +120,16 @@ class ProductController extends Controller
         unset($data['custom_category']);
 
         return $data;
+    }
+
+    public function image(Product $product)
+    {
+        $image = ProductImage::where('product_id', $product->id)->firstOrFail();
+
+        return response(base64_decode($image->image_data, true), 200, [
+            'Content-Type' => $image->mime_type,
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 
 }
