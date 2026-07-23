@@ -8,6 +8,10 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(Kernel::class)->bootstrap();
 
+if (DB::connection()->getDriverName() !== 'pgsql') {
+    exit(0);
+}
+
 $schema = env(
     'DB_SCHEMA',
     env('APP_ENV', 'production') === 'production' ? 'coffeeshop' : 'public'

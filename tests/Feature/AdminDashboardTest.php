@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\FeaturedSection;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -22,6 +23,7 @@ class AdminDashboardTest extends TestCase
             ->assertRedirect(route('dashboard'));
 
         $this->get('/dashboard')->assertOk()->assertSee('Users & Roles', false)->assertSee('Homepage Featured Section');
+        $this->assertSame(0, FeaturedSection::count(), 'Opening the dashboard must not write configuration records.');
     }
 
     public function test_regular_user_cannot_open_admin_dashboard(): void

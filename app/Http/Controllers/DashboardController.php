@@ -22,16 +22,10 @@ class DashboardController extends Controller
         // Fetch all orders for display
         $orders = Order::with(['user', 'items.product'])->latest()->get();
         $products = Product::latest()->get();
-        $featuredSection = FeaturedSection::firstOrCreate([], [
-            'title' => 'Featured Favorites',
-            'description' => 'A small selection of drinks we think you’ll love.',
-            'background_color' => '#f5eee5',
-            'title_color' => '#1c0f07',
-            'ticker_text' => 'Freshly roasted • Thoughtfully sourced • Made with love',
-            'ticker_text_color' => '#f2cb83',
-            'ticker_background_color' => '#1c0f07',
-            'ticker_speed' => 22,
-        ]);
+        // A dashboard GET must remain read-only. Persist these defaults only
+        // when an administrator explicitly submits the featured-section form.
+        $featuredSection = FeaturedSection::first()
+            ?? new FeaturedSection(FeaturedSection::defaults());
         $users = User::withCount('orders')->latest()->get();
         $activityLogs = ActivityLog::with('actor')->latest()->limit(100)->get();
         $userStats = [
@@ -60,7 +54,7 @@ class DashboardController extends Controller
             'product_three_id' => ['nullable', 'distinct', 'exists:products,id'],
         ]);
 
-        FeaturedSection::firstOrCreate([])->update($data);
+        FeaturedSection::firstOrCreate([], FeaturedSection::defaults())->update($data);
         ActivityLog::record('homepage.featured_updated', 'Homepage featured section settings were updated');
 
         return back()->with('success', 'Homepage featured section updated.');
