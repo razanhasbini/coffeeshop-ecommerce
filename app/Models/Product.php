@@ -20,5 +20,5 @@ class Product extends Model
         'Pastries',
     ];
 
-    protected $fillable = ['name', 'description', 'price', 'category', 'image_url'];
+    protected $fillable = ['name', 'description', 'price', 'category', 'image_url', 'image_public_id'];
 }

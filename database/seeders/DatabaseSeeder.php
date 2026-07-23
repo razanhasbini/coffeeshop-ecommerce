@@ -13,14 +13,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $email = env('SUPER_ADMIN_EMAIL');
+        $password = env('SUPER_ADMIN_PASSWORD');
 
-        $superAdmin = User::updateOrCreate([
-            'email' => 'test@example.com',
-        ], [
-            'username' => 'Test User',
-            'password' => 'password',
-        ]);
+        if (! $email || ! $password) {
+            if (! app()->environment(['local', 'testing'])) {
+                $this->command?->warn('Super admin was not seeded: configure SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD.');
+
+                return;
+            }
+
+            $email = 'test@example.com';
+            $password = 'password';
+        }
+
+        $superAdmin = User::updateOrCreate(
+            ['email' => $email],
+            [
+                'username' => env('SUPER_ADMIN_NAME', 'CoffeeShop Owner'),
+                'password' => $password,
+            ]
+        );
 
         $superAdmin->forceFill([
             'is_admin' => true,

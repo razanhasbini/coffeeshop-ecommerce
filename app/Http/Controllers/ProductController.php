@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\ProductImageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Models\ActivityLog;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function __construct(private readonly ProductImageService $images)
+    {
+    }
+
     public function index(Request $request)
     {
         // Build query
@@ -59,7 +63,7 @@ class ProductController extends Controller
     {
         $data = $this->validatedProduct($request, true);
         $data = $this->resolveCategory($data);
-        $data['image_url'] = '/storage/' . $request->file('image')->store('products', 'public');
+        $data = [...$data, ...$this->images->store($request->file('image'))];
         $product = Product::create($data);
         ActivityLog::record('product.created', 'Product “'.$product->name.'” was created', $product, ['price' => $product->price]);
 
@@ -72,8 +76,9 @@ class ProductController extends Controller
         $data = $this->resolveCategory($data);
 
         if ($request->hasFile('image')) {
-            $this->deleteUploadedImage($product->image_url);
-            $data['image_url'] = '/storage/' . $request->file('image')->store('products', 'public');
+            $newImage = $this->images->store($request->file('image'));
+            $this->images->delete($product->image_url, $product->image_public_id);
+            $data = [...$data, ...$newImage];
         }
 
         $product->update($data);
@@ -85,7 +90,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         ActivityLog::record('product.deleted', 'Product “'.$product->name.'” was deleted', $product);
-        $this->deleteUploadedImage($product->image_url);
+        $this->images->delete($product->image_url, $product->image_public_id);
         $product->delete();
 
         return back()->with('success', 'Product deleted successfully.');
@@ -114,10 +119,4 @@ class ProductController extends Controller
         return $data;
     }
 
-    private function deleteUploadedImage(?string $imageUrl): void
-    {
-        if ($imageUrl && str_starts_with($imageUrl, '/storage/')) {
-            Storage::disk('public')->delete(substr($imageUrl, strlen('/storage/')));
-        }
-    }
 }
